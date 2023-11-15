@@ -1,21 +1,13 @@
 <section class="c-quiz js-quiz">
   <div class="c-quiz__container">
-    <div
-      class="c-quiz__slide c-quiz__slide--first u-text-align--center-d u-text-align--center-m js-quiz-first-slide active"
-    >
+    <div class="c-quiz__slide c-quiz__slide--first u-text-align--center-d u-text-align--center-m js-quiz-first-slide active">
       <div class="c-quiz__img-container">
-        <img
-          src="{{ module.first__slide.image.src }}"
-          alt="{{ module.first__slide.image.alt }}"
-          class="c-quiz__img"
-        />
+        <img src="{{ module.first__slide.image.src }}" alt="{{ module.first__slide.image.alt }}" class="c-quiz__img" />
       </div>
       <div class="c-quiz__content-container">
         <div class="c-quiz__subtitle">{{ module.first__slide.subtitle }}</div>
         <div class="c-quiz__content">{{ module.first__slide.content }}</div>
-        <div class="c-quiz__button js-quiz-next">
-          {{module.first__slide.button}}
-        </div>
+        <button class="c-quiz__button js-quiz-next">{{module.first__slide.button}}</button>
       </div>
     </div>
   </div>
@@ -23,13 +15,16 @@
   {% for slide in module.slides %}
   <div class="c-quiz__slide js-quiz-slide">
     <div class="c-quiz__img-container">
-      <img
-        src="{{ slide.image.src }}"
-        alt="{{ slide.image.alt }}"
-        class="c-quiz__img"
-      />
+      <img src="{{ slide.image.src }}" alt="{{ slide.image.alt }}" class="c-quiz__img" />
     </div>
     <div class="c-quiz__content-container c-quiz__content-container--slides">
+      <div class="c-quiz__progress-bar">
+        {% for s in module.slides + 1 %}
+        <div class="c-quiz__progress--circle" style="left: calc((100% / 7) * {{ loop.index0 }}) ">
+          {% icon name="Check" style="SOLID" unicode="f00c" icon_set="fontawesome-6.4.2" purpose="decorative" title="Check Icon" %}
+        </div>
+        {% endfor %}
+      </div>
       <div class="c-quiz__subtitle">{{slide.subtitle}}</div>
       <h3 class="c-quiz__question">{{slide.question}}</h3>
       <div class="c-quiz__options">
@@ -39,71 +34,41 @@
             type="number"
             class="c-quiz__input"
             id="input-employees"
-            placeholder="Enter your  number of employees here"
+            placeholder="Enter your number of employees here"
+            data-type="{{slide.type}}"
+            data-property="{{slide.property}}"
+            data-value=""
           />
+          <p class="c-quiz__input--error">*Please enter a number greater than 0.</p>
         </form>
-        {% else %}
-        {% for answer in slide.answers %}
-        <div
-          class="c-quiz__{{slide.type}} js-quiz-answer"
-          data-type="{{slide.type}}"
-          data-property="{{slide.property}}"
-          data-value="{{answer.value}}"
-          {%
-          if
-          answer.link.url.href
-          %}data-link="{{answer.link.url.href}}"
-          {%
-          endif
-          %}
-        >
+        {% else %} {% for answer in slide.answers %}
+        <div class="c-quiz__{{slide.type}} js-quiz-answer" data-type="{{slide.type}}" data-property="{{slide.property}}" data-value="{{answer.value}}">
           <div class="c-quiz__selection"></div>
           <div class="c-quiz__label"><span class="c-quiz__label--order"></span>{{answer.title}}</div>
         </div>
         {% endfor %} {% endif %}
       </div>
     </div>
-    <!-- <div class="c-quiz__progress-bar">
-      <div
-        class="c-quiz__progress"
-        style="width: {{loop.index / module.slides|length * 100 }} "
-      ></div>
-    </div> -->
-    <!-- <div class="c-quiz__nav">
-      <div class="c-quiz__prev js-quiz-prev">
-        {{icon.render('chevorn-left','','c-quiz__nav-icon')}}
-        {{module.options.prev}}
-      </div>
-      <div class="c-quiz__counter">
-        {{loop.index}} of {{module.slides|length}}
-      </div>
-      <div class="c-quiz__next js-quiz-next">
-        {{module.options.next}}
-        {{icon.render('chevron-right','','c-quiz__nav-icon')}}
-      </div>
-    </div> -->
   </div>
   {% endfor %}
 
   <div class="c-quiz__slide js-quiz-slide">
     <div class="c-quiz__img-container">
-      <img
-        src="{{ slide.image.src }}"
-        alt="{{ slide.image.alt }}"
-        class="c-quiz__img"
-      />
+      <img src="" alt="Small Team Picture" class="c-quiz__img c-quiz__last-slide--img" />
     </div>
-    <div class="c-quiz__content-container">
-      <div class="c-quiz__content">{{module.last_slide.content}}</div>
-      <div class="c-quiz__form js-quiz-form">
-        {% form "form" form_to_use='{{ module.last_slide.form.form.form_id}}',
-        follow_up_type_simple='{{
-        module.last_slide.form.follow_up_type_simple}}',
-        simple_email_for_live_id='{{module.last_slide.form}}' %}
+    <div class="c-quiz__content-container c-quiz__price">
+      <h5 class="c-quiz__price--pre-heading">Your Tailored IT Estimate</h5>
+      <h3 class="c-quiz__price--heading">$<span class="c-quiz-price--value">X</span>/month per user</h3>
+
+      <div class="c-quiz__price-copy">
       </div>
-      <div class="c-quiz__prev js-quiz-prev">
-        {{icon.render('chevron-left','','c-quiz__nav-icon')}}
-        {{module.last_slide.button}}
+      <button class="c-quiz__button">{{module.last_slide.button}}</button>
+      <p class="c-quiz__price--disclaimer"></p>
+
+      <div class="c-quiz__form js-quiz-form">
+        {% form form_to_use="{{ module.last_slide.form.form_id }}" response_response_type="{{ module.last_slide.form.response_type }}" response_message="{{ module.last_slide.form.message }}"
+        response_redirect_id="{{ module.last_slide.form.redirect_id }}" response_redirect_url="{{module.last_slide.form.redirect_url}}" gotowebinar_webinar_key="{{
+        module.last_slide.form.gotowebinar_webinar_key }}" %}
       </div>
     </div>
   </div>
